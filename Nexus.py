@@ -1,11 +1,11 @@
+import streamlit as st
 import requests
 from bs4 import BeautifulSoup
 import spacy
 from gtts import gTTS
-import speech_recognition as sr
-from art import text2art
-import time
 import subprocess
+import time
+from art import text2art
 
 # Load spaCy NLP model
 nlp = spacy.load("en_core_web_sm")
@@ -25,10 +25,10 @@ def get_website_data(url):
         website_data = ' '.join(element.get_text() for element in paragraphs)
         return website_data.lower()  # Convert to lowercase
     except requests.exceptions.RequestException as e:
-        print(f"Error accessing the website : {e}")
+        st.error(f"Error accessing the website: {e}")
         return None
     except Exception as ex:
-        print(f"An unexpected error occurred: {ex}")
+        st.error(f"An unexpected error occurred: {ex}")
         return None
 
 def process_question(question):
@@ -87,90 +87,59 @@ def generate_response(processed_question, website_data, url):
             response = f"I couldn't find specific information based on your question about {url}."
 
     speaking = True  # Set speaking flag to True before speaking
-    speak(response)  # Speak the response
-    speaking = False  # Reset speaking flag after speaking
     return response
 
-def speak(text):
-    global speaking
+def main():
+    st.title("Nexus - Your Virtual Assistant")
+    
+    # Display art banner
+    st.text(text2art("Nexus"))
 
-    # Use gTTS for text-to-speech conversion
-    tts = gTTS(text=text, lang='en')
-    tts.save('response.mp3')
+    # User input
+    user_query = st.text_input("Ask me anything:")
 
-    # Play the generated MP3 file using the default audio player
-    subprocess.run(["start", "response.mp3"], shell=True)
+    if user_query:
+        college_data = {
+             "nri": [
+                'https://www.nrigroupindia.com/'
+            ],
+            "courses": [
+                'https://www.nrigroupindia.com/courses/'
+            ],
+            "inception":[
+                'https://www.nrigroupindia.com/about-us/the-inception/'
+                ],
+            "vision":[
+                'https://www.nrigroupindia.com/about-us/the-inception/'
+                ],
+            "mission":[
+                'https://www.nrigroupindia.com/about-us/the-inception/'
+                ],
+            "admission":[
+                'https://www.nrigroupindia.com/admission-procedure/'
+                ],
 
-def listen_for_user_input():
-    recognizer = sr.Recognizer()
+            "computer science department":[
+                'https://www.nrigroupindia.com/niist/computer-science-department/'
+                ]
+           # Add more keywords with their respective URLs
+        }
+        
+        processed_question = process_question(user_query)
+        found = False
 
-    with sr.Microphone() as source:
-        print("Listening for user input...")
-        recognizer.adjust_for_ambient_noise(source)
-        try:
-            user_input = recognizer.listen(source, timeout=20)
-            print("Processing user input...")
-            user_query = recognizer.recognize_google(user_input)
-            print(f"User input: {user_query}")
-            return user_query
-        except sr.UnknownValueError:
-            if not speaking:  # If not speaking, respond with "Could not understand the user"
-                speak("Could not understand the user. Please try again.")
-            return None
-        except sr.RequestError as e:
-            print(f"Could not request results from Google Speech Recognition service; {e}")
-            return None
+        for keyword, urls in college_data.items():
+            if keyword.lower() in processed_question:
+                found = True
+                for url in urls:
+                    website_data = get_website_data(url)
+                    if website_data:
+                        response = generate_response(processed_question, website_data, url)
+                        st.write(f"Response: {response}")
+                        break  # Break after finding a match on any URL for the keyword
+
+        if not found:
+            st.write("I couldn't find information based on your query.")
 
 if __name__ == "__main__":
-    print(text2art("Nexus"))
-
-    # Greet the user when Nexus is awakened
-    speak("Hello! I am Nexus, your virtual assistant. How may I assist you today?")
-
-    while True:
-        user_query = listen_for_user_input()
-
-        if user_query:
-            college_data = {
-                 "nri": [
-                    'https://www.nrigroupindia.com/'
-                ],
-                "courses": [
-                    'https://www.nrigroupindia.com/courses/'
-                ],
-                "inception":[
-                    'https://www.nrigroupindia.com/about-us/the-inception/'
-                    ],
-                "vision":[
-                    'https://www.nrigroupindia.com/about-us/the-inception/'
-                    ],
-                "mission":[
-                    'https://www.nrigroupindia.com/about-us/the-inception/'
-                    ],
-                "admission":[
-                    'https://www.nrigroupindia.com/admission-procedure/'
-                    ],
-
-                "computer science department":[
-                    'https://www.nrigroupindia.com/niist/computer-science-department/'
-                    ]
-               # Add more keywords with their respective URLs
-            }
-            
-            processed_question = process_question(user_query)
-            found = False
-
-            for keyword, urls in college_data.items():
-                if keyword.lower() in processed_question:
-                    found = True
-                    for url in urls:
-                        website_data = get_website_data(url)
-                        if website_data:
-                            response = generate_response(processed_question, website_data, url)
-                            print(f"Response: {response}")
-                            # Wait for the response to complete before listening for the next user input
-                            time.sleep(5)
-                            break  # Break after finding a match on any URL for the keyword
-
-            if not found:
-                speak("I couldn't find information based on your query.")
+    main()
