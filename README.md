@@ -1,95 +1,161 @@
-# College Information Audio Query Service
 
-This repository contains a Flask-based web application that allows users to ask questions about a college by submitting an audio file. The application processes the audio query, retrieves relevant information from specified URLs, and responds with an audio message.
+# 🤖 NEXUS — Virtual Assistant for NRI Group
 
-## Features
-
-- **Audio Query Processing**: Users can submit questions as audio files.
-- **Natural Language Processing**: Utilizes spaCy for keyword extraction and processing.
-- **Web Scraping**: Retrieves data from specified college URLs using BeautifulSoup.
-- **Text-to-Speech**: Generates an audio response using gTTS (Google Text-to-Speech).
-- **REST API**: Provides an endpoint to handle audio queries and respond with audio answers.
-
-## Requirements
-
-- Python 3.x
-- Flask
-- requests
-- BeautifulSoup4
-- spaCy
-- gTTS
-- SpeechRecognition
-
-## Setup
-
-1. **Clone the repository**:
-    ```sh
-    git clone https://github.com/your-username/college-info-audio-query.git
-    cd college-info-audio-query
-    ```
-
-2. **Install dependencies**:
-    ```sh
-    pip install -r requirements.txt
-    ```
-
-3. **Download spaCy language model**:
-    ```sh
-    python -m spacy download en_core_web_sm
-    ```
-
-## Usage
-
-3. **Receive the audio response**:
-    - The response will be an audio file (`response.mp3`) containing the answer to the query.
-
-## Endpoints
-
-### POST /analyze_audio
-
-#### Request
-- `audio_data`: The audio file containing the user's query.
-
-#### Response
-- `200 OK`: Returns an audio file with the response.
-- `500 Internal Server Error`: Returns an error message if something goes wrong.
-
-## Example
-
-1. **Submit an audio file with a question**:
-    - Question: "What courses are offered?"
-
-2. **Process and retrieve data from specified URLs**:
-    - The application will process the query, extract keywords, scrape the relevant URLs, and generate a response.
-
-3. **Receive an audio response**:
-    - The response might mention the courses offered and provide context.
-
-## Adding New Keywords and URLs
-
-You can add more keywords and their respective URLs in the `college_data` dictionary in `app.py`. This allows the application to handle a broader range of queries.
-
-```python
-college_data = {
-    "nri": ['https://www.nrigroupindia.com/'],
-    "courses": ['https://www.nrigroupindia.com/courses/'],
-    "inception": ['https://www.nrigroupindia.com/about-us/the-inception/'],
-    "vision": ['https://www.nrigroupindia.com/about-us/the-inception/'],
-    "mission": ['https://www.nrigroupindia.com/about-us/the-inception/'],
-    "admission": ['https://www.nrigroupindia.com/admission-procedure/'],
-    "computer science department": ['https://www.nrigroupindia.com/niist/computer-science-department/']
-    # Add more keywords with their respective URLs
-}
-```
-
-## Contributing
-
-Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+> An intelligent web-based assistant built with **Streamlit**, designed to answer queries about the **NRI Group of Institutions** using **real-time website data**, **NLP**, and **text-to-speech** capabilities.
 
 ---
 
-Feel free to customize this README to better fit your project's specifics and add any additional information that might be helpful for users or contributors.
+## 🧠 Overview
+
+**NEXUS** is a smart AI-powered virtual assistant that can:
+- Fetch **live data** from NRI Group’s official website.
+- Understand **natural language queries** using **spaCy NLP**.
+- Read out answers using **Google Text-to-Speech (gTTS)**.
+- Maintain **conversation history** and allow quick re-queries.
+- Provide a clean and beautiful **Streamlit-based GUI**.
+
+---
+
+## ✨ Features
+
+### 🧩 Core Features
+- 🔍 **Smart Search:** Ask questions about NRI Group, courses, faculty, admissions, etc.  
+- 🗣️ **Voice Output:** Get responses as audio using gTTS.  
+- 🌐 **Live Website Data:** Fetches and processes real-time data from official NRI URLs.  
+- 💬 **Conversation History:** Keeps a track of your last few queries.  
+- 🧠 **NLP-powered Understanding:** Uses spaCy to understand user intent and extract keywords.  
+- 🎨 **Beautiful UI:** Custom CSS styling for a smooth and modern look.
+
+---
+
+## 🧰 Tech Stack
+
+| Component | Technology |
+|------------|-------------|
+| Frontend | Streamlit |
+| NLP | spaCy |
+| Web Scraping | BeautifulSoup |
+| Text-to-Speech | gTTS |
+| HTTP Requests | requests |
+| Styling | Custom CSS |
+| Language | Python 3.9+ |
+
+---
+
+## ⚙️ Installation
+
+### 1️⃣ Clone the Repository
+```bash
+git clone https://github.com/yourusername/nexus-virtual-assistant.git
+cd nexus-virtual-assistant
+````
+
+### 2️⃣ Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 3️⃣ Install spaCy Model
+
+```bash
+python -m spacy download en_core_web_sm
+```
+
+---
+
+## 🚀 Run the App
+
+Launch the Streamlit web app:
+
+```bash
+streamlit run nexus.py
+```
+
+Then open your browser at 👉 [http://localhost:8501](http://localhost:8501)
+
+---
+
+## 💬 How It Works
+
+1. 🧍 User enters a natural language query (e.g., “Tell me about the admission process”).
+2. 🧠 The app processes the text using **spaCy** and extracts meaningful keywords.
+3. 🌐 It fetches real-time data from relevant NRI Group URLs using **requests + BeautifulSoup**.
+4. 🔍 The assistant finds relevant sentences matching your query.
+5. 🗣️ The response is displayed beautifully and optionally spoken out loud using **gTTS**.
+6. 🕓 Your query and response are saved in the **conversation history**.
+
+---
+
+## 🎛️ Sidebar Features
+
+| Option                | Description                                                      |
+| --------------------- | ---------------------------------------------------------------- |
+| **🎯 Features List**  | Overview of NEXUS features                                       |
+| **📚 Topics**         | Shows available query topics (Courses, Faculty, Admission, etc.) |
+| **🗑️ Clear History** | Clears the conversation memory                                   |
+| **🚀 Quick Actions**  | Ready-made query buttons for instant answers                     |
+
+---
+
+## 🧩 Supported Topics
+
+* 🏫 About NRI Group
+* 📘 Courses
+* 🧾 Admission Process
+* 💻 Computer Science Department
+* 👨‍🏫 Faculty
+* 🏗️ Facilities
+* 🎯 Vision & Mission
+* 📞 Contact Information
+
+---
+
+## 📦 Dependencies
+
+```
+streamlit
+requests
+beautifulsoup4
+spacy
+gTTS
+```
+
+---
+
+## 🔊 Example Interaction
+
+**User:** “Tell me about computer science department”
+**NEXUS:** “The Computer Science Department at NRI offers B.Tech and M.Tech programs focusing on AI, ML, and software engineering...”
+🎧 *(Audio plays automatically)*
+
+---
+
+## 🧠 Smart NLP & Voice Integration
+
+| Function           | Module                                     |
+| ------------------ | ------------------------------------------ |
+| Text Preprocessing | spaCy                                      |
+| Keyword Extraction | Lemmatization + Stopword removal           |
+| Speech Generation  | gTTS (Google Text-to-Speech)               |
+| Data Fetching      | BeautifulSoup (Scrapes text intelligently) |
+
+---
+
+## 🧑‍💻 Author
+
+**Satvik**
+*AI DevSecOps Engineer | Streamlit Developer*
+
+
+---
+
+## 📜 License
+
+MIT License © 2025 **Satvik**
+Feel free to fork, modify, and enhance for educational or institutional use.
+
+---
+
+### 🪄 “NEXUS — Because every institution deserves its own smart assistant.”
+
